@@ -11,7 +11,7 @@ import Animated, { FadeIn, SlideOutLeft } from 'react-native-reanimated';
 import { AuthHeaderLayout } from '../components/authHeader';
 
 interface SignInScreenProps {
-  onSignIn?: (studentNo: string, password: string) => void;
+  onSignIn?: () => void;
   onNavigateToRegister?: () => void;
   onForgotPassword?: () => void;
   onGoogleSignIn?: () => void;
@@ -27,9 +27,6 @@ export function SignInScreen({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignIn = () => {
-    onSignIn?.(studentNo.trim(), password);
-  };
 
   return (
     <AuthHeaderLayout>
@@ -89,7 +86,7 @@ export function SignInScreen({
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={handleSignIn}
+          onPress={onSignIn}
           activeOpacity={0.85}
           className="bg-[#5A4A28] rounded-[12px] py-4 items-center shadow-sm"
         >

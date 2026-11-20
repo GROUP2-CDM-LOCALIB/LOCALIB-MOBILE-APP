@@ -86,7 +86,7 @@ export function RegisterScreen({
         {/* ==========================STEP 1=============================== */}
         {step === 1 && (
           <Animated.View key="step1" entering={FadeIn.duration(300)} className="flex-1">
-            <View className="items-center">
+            <View className="items-center mb-8">
               <Text className="text-[26px] font-poppins-bold text-[#1E1C1A]">
                 Registration
               </Text>
@@ -95,7 +95,7 @@ export function RegisterScreen({
               </Text>
             </View>
 
-            <View className="mt-6 gap-3.5">
+            <View className="mt-6 gap-5">
 
               <View className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5">
                 <TextInput
@@ -141,7 +141,7 @@ export function RegisterScreen({
         {step === 2 && (
           <Animated.View key="step2" entering={FadeIn.duration(300)} className="flex-1">
 
-            <View className="items-center">
+            <View className="items-center mb-8">
               <Text className="text-[26px] font-poppins-bold text-[#1E1C1A]">
                 Registration
               </Text>
@@ -150,7 +150,7 @@ export function RegisterScreen({
               </Text>
             </View>
 
-            <View className="mt-6 gap-3.5">
+            <View className="mt-6 gap-6">
               
               <View className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5">
                 <TextInput
@@ -167,7 +167,7 @@ export function RegisterScreen({
               <TouchableOpacity
                 onPress={() => setActiveDropdown('institute')}
                 activeOpacity={0.8}
-                className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5 flex-row items-center justify-center relative">
+                className="bg-[#E9E4DC] rounded-[12px] px-4 py-5 flex-row items-center justify-center relative">
 
                     <Text className={`text-sm ${institute ? 'text-[#1E1C1A]' : 'text-[#8C867E]'}`}>
                         {institute || 'Institute'}
@@ -184,7 +184,7 @@ export function RegisterScreen({
               <TouchableOpacity 
                 onPress={() => setActiveDropdown('program')}
                 activeOpacity={0.8}
-                className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5 flex-row items-center justify-center relative"
+                className="bg-[#E9E4DC] rounded-[12px] px-4 py-5 flex-row items-center justify-center relative"
               >
                 <Text className={`text-sm ${program ? 'text-[#1E1C1A]' : 'text-[#8C867E]'}`}>
                   {program || 'Program'}
@@ -200,7 +200,7 @@ export function RegisterScreen({
               <TouchableOpacity
                 onPress={() => setActiveDropdown('year')}
                 activeOpacity={0.8}
-                className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5 flex-row items-center justify-center relative"
+                className="bg-[#E9E4DC] rounded-[12px] px-4 py-5 flex-row items-center justify-center relative"
               >
                 <Text className={`text-sm ${yearLevel ? 'text-[#1E1C1A]' : 'text-[#8C867E]'}`}>
                   {yearLevel || 'Year Level'}
@@ -216,11 +216,11 @@ export function RegisterScreen({
           </Animated.View>
         )}
 
- {/* ==========================STEP 3=============================== */}
+        {/* ==========================STEP 3=============================== */}
         {step === 3 && (
           <Animated.View key="step3" entering={FadeIn.duration(300)} className="flex-1">
 
-            <View className="items-center mb-3">
+            <View className="items-center mb-8">
               <Text className="text-[26px] font-poppins-bold text-[#1E1C1A]">
                 Registration
               </Text>
@@ -231,9 +231,9 @@ export function RegisterScreen({
 
             <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ gap: 10, paddingBottom: 8 }}
+              contentContainerStyle={{ gap: 16, paddingBottom: 8 }}
             >
-              <View className="bg-[#E2DFD9] rounded-[16px] py-3 px-3.5 flex-row items-center justify-between">
+              <View className="bg-[#E2DFD9] rounded-[16px] py-8 px-4 flex-row items-center justify-between">
                 <View className="flex-row items-center flex-1 pr-2">
                   <View className="w-9 h-9 rounded-full bg-[#EFECE6] items-center justify-center mr-3">
                     <Ionicons name="id-card-outline" size={18} color="#1E1C1A" />
@@ -258,13 +258,13 @@ export function RegisterScreen({
                     size={14}
                     color="#4A3E20"
                   />
-                  <Text className="text-[10px] font-poppins-semibold text-[#1E1C1A] ml-1">
+                  <Text className="text-[11px] font-poppins-semibold text-[#1E1C1A] ml-1">
                     {studentIdFile ? 'Uploaded' : 'Browse'}
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <View className="bg-[#E2DFD9] rounded-[16px] py-3 px-3.5 flex-row items-center justify-between">
+              <View className="bg-[#E2DFD9] rounded-[16px] py-8 px-4 flex-row items-center justify-between">
                 <View className="flex-row items-center flex-1 pr-2">
                   <View className="w-9 h-9 rounded-full bg-[#EFECE6] items-center justify-center mr-3">
                     <Ionicons name="camera-outline" size={18} color="#1E1C1A" />
@@ -289,13 +289,13 @@ export function RegisterScreen({
                     size={14}
                     color="#4A3E20"
                   />
-                  <Text className="text-[10px] font-poppins-semibold text-[#1E1C1A] ml-1">
+                  <Text className="text-[12px] font-poppins-semibold text-[#1E1C1A] ml-1">
                     {selfieWithIdFile ? 'Uploaded' : 'Snap'}
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <View className="bg-[#E2DFD9] rounded-[16px] py-3 px-3.5 flex-row items-center justify-between">
+              <View className="bg-[#E2DFD9] rounded-[16px] py-8 px-4 flex-row items-center justify-between">
                 <View className="flex-row items-center flex-1 pr-2">
                   <View className="w-9 h-9 rounded-full bg-[#EFECE6] items-center justify-center mr-3">
                     <Ionicons name="document-text-outline" size={18} color="#1E1C1A" />
@@ -320,7 +320,7 @@ export function RegisterScreen({
                     size={14}
                     color="#4A3E20"
                   />
-                  <Text className="text-[10px] font-poppins-semibold text-[#1E1C1A] ml-1">
+                  <Text className="text-[12px] font-poppins-semibold text-[#1E1C1A] ml-1">
                     {ovrfFile ? 'Uploaded' : 'Attach'}
                   </Text>
                 </TouchableOpacity>

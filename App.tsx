@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LoadScreen } from './src/features/auth/screens/startScreen';
 import { SignInScreen } from './src/features/auth/screens/signInScreen';
 import { RegisterScreen } from './src/features/auth/screens/registerScreen'; 
+import { DashboardScreen } from './src/features/main/screens/dashboardScreen';
 import * as SplashScreen from 'expo-splash-screen';
 import { 
   useFonts, 
@@ -19,7 +20,7 @@ import {
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'start' | 'signIn' | 'register'>('start');
+  const [currentScreen, setCurrentScreen] = useState<'start' | 'signIn' | 'register' | 'dashboard'>('start');
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -44,6 +45,7 @@ export default function App() {
     return (
       <SignInScreen 
         onNavigateToRegister={() => setCurrentScreen('register')} 
+        onSignIn={() => setCurrentScreen('dashboard')}
       />
     );
   }
@@ -53,6 +55,14 @@ export default function App() {
       <RegisterScreen 
         onBackToSignIn={() => setCurrentScreen('signIn')}
       />
+    );
+  }
+
+  if (currentScreen === 'dashboard') {
+    return (
+      <DashboardScreen 
+      onSignOut={() => setCurrentScreen('signIn')}
+    />
     );
   }
 
