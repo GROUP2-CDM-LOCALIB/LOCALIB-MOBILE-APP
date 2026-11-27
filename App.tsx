@@ -21,8 +21,9 @@ import {
   PlusJakartaSans_400Regular, 
   PlusJakartaSans_600SemiBold 
 } from '@expo-google-fonts/plus-jakarta-sans';
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { auth } from "./src/lib/firebase";
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,8 +31,24 @@ export default function App() {
   onAuthStateChanged(auth, (user) => {
     console.log(user)
   })
-
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true); // Waiting for the bouncer to check
   const [currentScreen, setCurrentScreen] = useState<'start' | 'signIn' | 'register' | 'dashboard' | 'search' | 'category' | 'bookDetails'>('start');
+
+  // 1. Check for the "wristband" once when the app opens
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false); // Done checking!
+
+      // If they are logged in and sitting on start/signIn, send them to dashboard
+      if (currentUser) {
+        setCurrentScreen('dashboard');
+      }
+    });
+
+    return unsubscribe; // Clean up the listener when the app closes
+  }, []);
 
   const handleTabNavigation = (tab: MainTab) => { // para kay rene
     if (tab === 'Explore') setCurrentScreen('dashboard');
@@ -60,6 +77,15 @@ export default function App() {
     PlusJakartaSans_400Regular,
     PlusJakartaSans_600SemiBold,
   });
+
+  const handleSignOut = async () => {
+      try {
+        await signOut(auth); // Destroys the wristband on the phone!
+        setCurrentScreen('signIn');
+      } catch (error) {
+        console.error("Error signing out:", error);
+      }
+    };
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -91,7 +117,7 @@ export default function App() {
 if (currentScreen === 'dashboard') {
     return (
       <DashboardScreen 
-        onSignOut={() => setCurrentScreen('signIn')}
+        onSignOut={handleSignOut}
         onNavigateToSearch={() => setCurrentScreen('search')}
         onNavigateTab={handleTabNavigation}
         onSelectCategory={(name, books) => {
@@ -109,7 +135,7 @@ if (currentScreen === 'dashboard') {
         categoryName={selectedCategory.name}
         books={selectedCategory.books}
         onBack={() => setCurrentScreen('dashboard')}
-        onSignOut={() => setCurrentScreen('signIn')}
+        onSignOut={handleSignOut}
         onNavigateToSearch={() => setCurrentScreen('search')}
         onNavigateTab={handleTabNavigation}
         onSelectBook={(book) => handleOpenBook(book, 'category')}
@@ -120,7 +146,7 @@ if (currentScreen === 'dashboard') {
   if (currentScreen === 'search') {
     return (
       <SearchScreen 
-        onSignOut={() => setCurrentScreen('signIn')}
+        onSignOut={handleSignOut}
         onNavigateTab={handleTabNavigation}
         onSelectBook={(book) => handleOpenBook(book, 'search')}
       />
@@ -132,7 +158,7 @@ if (currentScreen === 'dashboard') {
       <BookDetails
         book={selectedBook}
         onBack={() => setCurrentScreen(previousScreen)}
-        onSignOut={() => setCurrentScreen('signIn')}
+        onSignOut={handleSignOut}
         onNavigateToSearch={() => setCurrentScreen('search')}
         onNavigateTab={handleTabNavigation}
         onSelectBook={(nextBook) => setSelectedBook(nextBook)}
@@ -144,6 +170,11 @@ if (currentScreen === 'dashboard') {
     );
   }
 
+  
 
-  return <LoadScreen onStart={() => setCurrentScreen('signIn')} />;
+return (
+    <LoadScreen 
+      onStart={() => setCurrentScreen(user ? 'dashboard' : 'signIn')} 
+    />
+  );
 }
