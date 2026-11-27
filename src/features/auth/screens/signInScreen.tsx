@@ -9,6 +9,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideOutLeft } from 'react-native-reanimated';
 import { AuthHeaderLayout } from '../components/authHeader';
+import { logIn } from '../../auth/auth';
+import { AuthError, type AuthErrorType } from "../../auth/auth";
+
+
+import ErrorBox from '../../../components/ErrorBox';
 
 interface SignInScreenProps {
   onSignIn?: () => void;
@@ -16,6 +21,13 @@ interface SignInScreenProps {
   onForgotPassword?: () => void;
   onGoogleSignIn?: () => void;
 }
+
+const authErrorMessages: Record<AuthErrorType, string> = {
+  [AuthError.WRONG_CREDENTIALS]: "Invalid email or password.",
+  [AuthError.LOGIN_ERROR]: "Unable to sign in right now. Please try again.",
+  [AuthError.MISSING_CREDENTIALS]: "Please enter both email and password.",
+  [AuthError.UNKNOWN]: "An unexpected error occurred.",
+};
 
 export function SignInScreen({
   onSignIn,
@@ -27,6 +39,8 @@ export function SignInScreen({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [error, setError] = useState<AuthErrorType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <AuthHeaderLayout>
@@ -41,38 +55,41 @@ export function SignInScreen({
             Access your Local Library now
           </Text>
         </View>
+        
+        <View> 
+          {error && <ErrorBox message={authErrorMessages[error]} />}
+            <View className="bg-[#E9E4DC] rounded-[12px] px-4 py-3 mb-2 mt-6">
+              <TextInput
+                value={studentNo}
+                onChangeText={setStudentNo}
+                placeholder="Student No."
+                placeholderTextColor="#8C867E"
+                autoCapitalize="none"
+                className="text-sm text-[#1E1C1A]"
+              />
+            </View>
 
-        <View className="bg-[#E9E4DC] rounded-[12px] px-4 py-3 mb-2 mt-6">
-          <TextInput
-            value={studentNo}
-            onChangeText={setStudentNo}
-            placeholder="Student No."
-            placeholderTextColor="#8C867E"
-            autoCapitalize="none"
-            className="text-sm text-[#1E1C1A]"
-          />
-        </View>
-
-        <View className="flex-row items-center bg-[#E9E4DC] rounded-[12px] px-4 py-3 mb-3.5 mt-2">
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Password"
-            placeholderTextColor="#8C867E"
-            secureTextEntry={!showPassword}
-            autoCapitalize="none"
-            className="flex-1 text-sm text-[#1E1C1A] pr-2"
-          />
-          <Pressable
-            onPress={() => setShowPassword((prev) => !prev)}
-            hitSlop={10}
-          >
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={20}
-              color="#7A756D"
-            />
-          </Pressable>
+            <View className="flex-row items-center bg-[#E9E4DC] rounded-[12px] px-4 py-3 mb-3.5 mt-2">
+              <TextInput
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Password"
+                placeholderTextColor="#8C867E"
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
+                className="flex-1 text-sm text-[#1E1C1A] pr-2"
+              />
+              <Pressable
+                onPress={() => setShowPassword((prev) => !prev)}
+                hitSlop={10}
+              >
+                <Ionicons
+                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color="#7A756D"
+                />
+              </Pressable>
+            </View>
         </View>
 
         <TouchableOpacity
@@ -85,15 +102,30 @@ export function SignInScreen({
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={onSignIn}
-          activeOpacity={0.85}
-          className="bg-[#5A4A28] rounded-[12px] py-4 items-center shadow-sm"
-        >
-          <Text className="text-white text-[14px] font-poppins-semibold tracking-wide">
-            Sign In
-          </Text>
-        </TouchableOpacity>
+<TouchableOpacity
+  disabled={isLoading}
+  onPress={async () => {
+    setIsLoading(true);
+    await logIn({
+      studentNo,
+      password,
+      setError,
+      onSuccess: (token) => {
+        // Save the token if you need it for your own API, then move to the next screen
+        if (onSignIn) onSignIn();
+      },
+    });
+    setIsLoading(false);
+  }}
+  activeOpacity={0.85}
+  className={`rounded-[12px] py-4 items-center shadow-sm ${
+    isLoading ? 'bg-[#8C867E]' : 'bg-[#5A4A28]'
+  }`}
+>
+  <Text className="text-white text-[14px] font-poppins-semibold tracking-wide">
+    {isLoading ? 'Signing In...' : 'Sign In'}
+  </Text>
+</TouchableOpacity>
 
         <View className="flex-row items-center my-5">
           <View className="flex-1 h-[1px] bg-[#E2DDD3]" />

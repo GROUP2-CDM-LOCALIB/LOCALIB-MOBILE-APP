@@ -4,6 +4,11 @@ import { LoadScreen } from './src/features/auth/screens/startScreen';
 import { SignInScreen } from './src/features/auth/screens/signInScreen';
 import { RegisterScreen } from './src/features/auth/screens/registerScreen'; 
 import { DashboardScreen } from './src/features/main/screens/dashboardScreen';
+import { SearchScreen } from './src/features/main/screens/searchScreen';
+import { MainTab } from './src/features/main/components/bottomNavigation';
+import { CategoryScreen } from './src/features/main/screens/categoryScreen';
+import { BookItem } from './src/features/main/components/books';
+import { BookDetails } from './src/features/main/screens/bookDetails';
 import * as SplashScreen from 'expo-splash-screen';
 import { 
   useFonts, 
@@ -16,11 +21,36 @@ import {
   PlusJakartaSans_400Regular, 
   PlusJakartaSans_600SemiBold 
 } from '@expo-google-fonts/plus-jakarta-sans';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./src/lib/firebase";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'start' | 'signIn' | 'register' | 'dashboard'>('start');
+  onAuthStateChanged(auth, (user) => {
+    console.log(user)
+  })
+
+  const [currentScreen, setCurrentScreen] = useState<'start' | 'signIn' | 'register' | 'dashboard' | 'search' | 'category' | 'bookDetails'>('start');
+
+  const handleTabNavigation = (tab: MainTab) => { // para kay rene
+    if (tab === 'Explore') setCurrentScreen('dashboard');
+    if (tab === 'Search') setCurrentScreen('search');
+  };
+
+  const [selectedBook, setSelectedBook] = useState<BookItem | null>(null);
+  const [previousScreen, setPreviousScreen] = useState<'dashboard' | 'search' | 'category'>('dashboard');
+
+  const handleOpenBook = (book: BookItem, from: 'dashboard' | 'search' | 'category') => {
+    setSelectedBook(book);
+    setPreviousScreen(from);
+    setCurrentScreen('bookDetails');
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState<{
+    name: string;
+    books: BookItem[];
+  }>({ name: '', books: [] });
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -58,13 +88,62 @@ export default function App() {
     );
   }
 
-  if (currentScreen === 'dashboard') {
+if (currentScreen === 'dashboard') {
     return (
       <DashboardScreen 
-      onSignOut={() => setCurrentScreen('signIn')}
-    />
+        onSignOut={() => setCurrentScreen('signIn')}
+        onNavigateToSearch={() => setCurrentScreen('search')}
+        onNavigateTab={handleTabNavigation}
+        onSelectCategory={(name, books) => {
+          setSelectedCategory({ name, books });
+          setCurrentScreen('category');
+        }}
+        onSelectBook={(book) => handleOpenBook(book, 'dashboard')}
+      />
     );
   }
+
+  if (currentScreen === 'category') {
+    return (
+      <CategoryScreen
+        categoryName={selectedCategory.name}
+        books={selectedCategory.books}
+        onBack={() => setCurrentScreen('dashboard')}
+        onSignOut={() => setCurrentScreen('signIn')}
+        onNavigateToSearch={() => setCurrentScreen('search')}
+        onNavigateTab={handleTabNavigation}
+        onSelectBook={(book) => handleOpenBook(book, 'category')}
+      />
+    );
+  }
+
+  if (currentScreen === 'search') {
+    return (
+      <SearchScreen 
+        onSignOut={() => setCurrentScreen('signIn')}
+        onNavigateTab={handleTabNavigation}
+        onSelectBook={(book) => handleOpenBook(book, 'search')}
+      />
+    );
+  }
+
+  if (currentScreen === 'bookDetails' && selectedBook) {
+    return (
+      <BookDetails
+        book={selectedBook}
+        onBack={() => setCurrentScreen(previousScreen)}
+        onSignOut={() => setCurrentScreen('signIn')}
+        onNavigateToSearch={() => setCurrentScreen('search')}
+        onNavigateTab={handleTabNavigation}
+        onSelectBook={(nextBook) => setSelectedBook(nextBook)}
+        onExploreShelf={(name, books) => {
+          setSelectedCategory({ name, books });
+          setCurrentScreen('category');
+        }}
+      />
+    );
+  }
+
 
   return <LoadScreen onStart={() => setCurrentScreen('signIn')} />;
 }

@@ -1,118 +1,99 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Image,
   Pressable,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
+import { TopNavigation } from '../components/topNavigation';
+import { BottomNavigation, MainTab } from '../components/bottomNavigation';
+import { BookCard, BookItem } from '../components/books';
+import exampleResponse from '../../../shared/data/exampleCategoryResponse.json';
+import { getBook } from '../api';
+
+
+
 
 interface DashboardScreenProps {
-    onSignOut?: () => void;
+  onSignOut?: () => void;
+  onNavigateToSearch?: () => void;
+  onNavigateTab?: (tab: MainTab) => void;
+  onSelectCategory?: (categoryName: string, books: BookItem[]) => void;
+  onSelectBook?: (book: BookItem) => void;
 }
 
-const FILTER_TABS = ['All Shelves', 'Currently Reading', 'Local Branches'];
+interface CategorySection {
+  id: string;
+  name: string;
+  books: BookItem[];
+}
 
-export function DashboardScreen({onSignOut}: DashboardScreenProps) {
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('All Shelves');
+
+export function DashboardScreen({
+  onSignOut,
+  onNavigateToSearch,
+  onNavigateTab,
+  onSelectCategory,
+  onSelectBook,
+}: DashboardScreenProps) {
+  const [activeFilterTab, setActiveFilterTab] = useState('All Shelves');
+  const [categories, setCategories] = useState<CategorySection[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      console.log('dsf');
+      await getBook();
+    }
+
+    // load()
+
+    const formattedCategories: CategorySection[] = exampleResponse.map((cat) => ({
+      id: String(cat.id),
+      name: cat.name,
+      books: cat.books.map((book) => ({
+        id: String(book.id),
+        title: book.title,
+        author: book.author,
+        category: cat.name,
+        cover: book.cover_url ? { uri: book.cover_url } : undefined,
+        isSaved: book.is_saved,
+      })),
+    }));
+
+    setCategories(formattedCategories);
+  }, []);
+
+  const savedBooks = categories.flatMap((cat) =>
+    cat.books.filter((book) => book.isSaved)
+  );
+
+  const curatedPicks = categories.flatMap((cat) => cat.books).slice(0, 4);
+
 
   return (
     <View className="flex-1 bg-[#FAF9F5]">
-      {/* Dark icons so they are visible on the light cream top bar */}
       <StatusBar style="dark" />
 
-      {/* 1. Top Navigation Header */}
-      <View className="flex-row items-center justify-between px-5 pt-14 pb-3.5 bg-[#D8C77A]">
-        <View className="flex-row items-center">
-          <View className="w-8 h-8 rounded-lg bg-[#EFECE3] items-center justify-center mr-2.5">
-            <Ionicons name="book-outline" size={18} color="#7A6532" />
-          </View>
-          <Text className="text-xl font-poppins-semibold text-[#1E1C1A]">
-            Localib
-          </Text>
-        </View>
+      {/* Top Navigation */}
+      <TopNavigation
+        onSignOut={onSignOut}
+        onSearchBarPress={onNavigateToSearch}
+        activeTab={activeFilterTab}
+        onSelectTab={setActiveFilterTab}
+      />
 
-        <View className="flex-row items-center gap-3">
-          <TouchableOpacity activeOpacity={0.7} className="p-1.5">
-            <Ionicons name="notifications-outline" size={22} color="#5A4A28" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onSignOut}
-            activeOpacity={0.8}
-            className="w-9 h-9 rounded-full bg-[#6E5C2E] items-center justify-center"
-          >
-            <Ionicons name="person-outline" size={18} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Main Scrollable Content */}
+      {/* Main Content */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
+        contentContainerStyle={{ paddingBottom: 80 }}
       >
-        {/* 2. Warm Gold Search & Filter Banner */}
-        <View className="bg-[#D8C77A] px-5 pt-4 pb-5 rounded-b-[28px]">
-          {/* Menu Button + Search Bar Row */}
-          <View className="flex-row items-center gap-3 mb-4">
-            <TouchableOpacity
-              activeOpacity={0.8}
-              className="w-12 h-12 rounded-2xl bg-[#FAF9F5] items-center justify-center shadow-sm"
-            >
-              <Ionicons name="menu-outline" size={24} color="#2E2B27" />
-            </TouchableOpacity>
-
-            <View className="flex-1 flex-row items-center bg-[#FAF9F5] rounded-full px-4 h-12 shadow-sm">
-              <Ionicons name="search-outline" size={20} color="#8C867E" />
-              <TextInput
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Search in Localib..."
-                placeholderTextColor="#8C867E"
-                className="flex-1 text-sm text-[#1E1C1A] ml-2.5"
-              />
-              <TouchableOpacity activeOpacity={0.7}>
-                <Ionicons name="barcode-outline" size={20} color="#5A4A28" />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Horizontal Filter Pills */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8 }}
-          >
-            {FILTER_TABS.map((tab) => {
-              const isSelected = activeTab === tab;
-              return (
-                <Pressable
-                  key={tab}
-                  onPress={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-full ${
-                    isSelected ? 'bg-[#5A4A28]' : 'bg-[#FAF9F5]'
-                  }`}
-                >
-                  <Text
-                    className={`text-xs font-poppins-medium ${
-                      isSelected ? 'text-white' : 'text-[#3B3731]'
-                    }`}
-                  >
-                    {tab}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
-        </View>
-
-        {/* 3. Section 1: Saved Books */}
-        <View className="px-5 mt-6">
+        {/* 1. Saved Books */}
+        <View className="pl-5 pr-0 mt-6">
           <View className="flex-row items-center justify-between mb-3.5">
             <View className="flex-row items-center">
               <Text className="text-lg font-poppins-bold text-[#1E1C1A]">
@@ -120,7 +101,7 @@ export function DashboardScreen({onSignOut}: DashboardScreenProps) {
               </Text>
               <View className="bg-[#EFE9D5] px-2.5 py-0.5 rounded-full ml-2.5">
                 <Text className="text-[11px] font-poppins-medium text-[#7A6532]">
-                  0 items
+                  {savedBooks.length} {savedBooks.length === 1 ? 'item' : 'items'}
                 </Text>
               </View>
             </View>
@@ -132,67 +113,199 @@ export function DashboardScreen({onSignOut}: DashboardScreenProps) {
             </TouchableOpacity>
           </View>
 
-          {/* Empty Container for Saved Books */}
-          <View className="h-48 rounded-2xl border border-dashed border-[#D6CFC2] bg-[#F4F1EA] items-center justify-center px-6">
-            <Ionicons name="bookmarks-outline" size={26} color="#9A948B" />
-            <Text className="text-xs font-poppins-medium text-[#7A756D] mt-2 text-center">
-              Saved books horizontal list will go here
-            </Text>
-          </View>
+          {savedBooks.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingRight: 20 }}
+            >
+              {savedBooks.map((book) => (
+                <BookCard
+                  key={book.id}
+                  book={book}
+                  onPress={(selected) => onSelectBook?.(selected)}
+                />
+              ))}
+            </ScrollView>
+          ) : (
+            <View className="h-48 rounded-2xl border border-dashed border-[#D6CFC2] bg-[#F4F1EA] items-center justify-center px-6">
+              <Ionicons name="bookmarks-outline" size={26} color="#9A948B" />
+              <Text className="text-xs font-poppins-medium text-[#7A756D] mt-2 text-center">
+                No saved books yet
+              </Text>
+            </View>
+          )}
         </View>
 
-        {/* 4. Section 2: Science & Nature */}
-        <View className="px-5 mt-7">
-          <View className="flex-row items-center justify-between mb-3.5">
-            <View className="flex-row items-center">
+        {/* 2. Local Curation Picks (Wide Featured Cards to break up standard book rows) */}
+        {curatedPicks.length > 0 && (
+          <View className="mt-12">
+            <View className="flex-row items-center px-5 mb-3.5">
               <View className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2" />
               <Text className="text-lg font-poppins-bold text-[#1E1C1A]">
-                Science & Nature
+                Local Curation Picks
               </Text>
             </View>
 
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text className="text-xs font-poppins-medium text-[#7A756D]">
-                Browse more ›
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20, gap: 14 }}
+            >
+              {curatedPicks.map((book, index) => {
+                // Sample ratings until rating is added to your database JSON
+                const sampleRatings = ['4.8', '4.6', '4.7', '4.5'];
+                const rating = sampleRatings[index % sampleRatings.length];
 
-          {/* Empty Container for Science & Nature Books */}
-          <View className="h-48 rounded-2xl border border-dashed border-[#D6CFC2] bg-[#F4F1EA] items-center justify-center px-6">
-            <Ionicons name="library-outline" size={26} color="#9A948B" />
-            <Text className="text-xs font-poppins-medium text-[#7A756D] mt-2 text-center">
-              Science & Nature books container
-            </Text>
-          </View>
-        </View>
+                return (
+                  <Pressable
+                    key={book.id}
+                    onPress={() => onSelectBook?.(book)}
+                    className="w-[310px] flex-row bg-[#FFFFFF] border border-[#EAE5DC] rounded-3xl p-3.5 shadow-sm"
+                  >
+                    {/* Left Book Cover */}
+                    <View className="w-24 h-36 rounded-2xl bg-[#EFECE3] overflow-hidden border border-[#E2DDD3]">
+                      {book.cover ? (
+                        <Image
+                          source={book.cover}
+                          className="w-full h-full"
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <View className="flex-1 items-center justify-center px-2">
+                          <Ionicons name="book-outline" size={26} color="#8C867E" />
+                          <Text
+                            numberOfLines={2}
+                            className="text-[9px] font-poppins-medium text-[#7A756D] text-center mt-1"
+                          >
+                            {book.title}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
 
-        {/* 5. Section 3: Self-Help & Personal Growth */}
-        <View className="px-5 mt-7">
-          <View className="flex-row items-center justify-between mb-3.5">
-            <View className="flex-row items-center flex-1 pr-2">
-              <View className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2" />
-              <Text className="text-lg font-poppins-bold text-[#1E1C1A]">
-                Self-Help & Personal Growth
+                    {/* Right Book Details */}
+                    <View className="flex-1 ml-3.5 justify-between">
+                      <View>
+                        {/* Uppercase Gold Category Label */}
+                        <Text
+                          numberOfLines={1}
+                          className="text-[10px] font-poppins-semibold tracking-wider text-[#B8962E] uppercase"
+                        >
+                          {book.category || 'Featured Archive'}
+                        </Text>
+
+                        {/* Title */}
+                        <Text
+                          numberOfLines={1}
+                          className="text-sm font-poppins-bold text-[#1E1C1A] mt-0.5"
+                        >
+                          {book.title}
+                        </Text>
+
+                        {/* Author */}
+                        <Text
+                          numberOfLines={1}
+                          className="text-xs font-poppins-regular text-[#7A756D]"
+                        >
+                          {book.author}
+                        </Text>
+
+                        {/* Short Synopsis Snippet */}
+                        <Text
+                          numberOfLines={2}
+                          className="text-[11px] font-poppins-regular text-[#5C5346] leading-4 mt-1.5"
+                        >
+                          A curated local library selection exploring key insights by {book.author}.
+                        </Text>
+                      </View>
+
+                      {/* Bottom Divider + Rating & Explore Pill Button */}
+                      <View className="flex-row items-center justify-between pt-2 mt-2 border-t border-[#F0ECE3]">
+
+                        <TouchableOpacity
+                          onPress={() => onSelectBook?.(book)}
+                          activeOpacity={0.85}
+                          className="bg-[#1E1C1A] px-4 py-1.5 rounded-full"
+                        >
+                          <Text className="text-[11px] font-poppins-semibold text-white">
+                            Explore
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
+
+            <View className="flex-row items-center my-5 mt-12">
+              <View className="flex-1 h-[1px] bg-[#E2DDD3]" />
+              <Text className="text-[11px] text-[#9A948B] mx-3">
+                Categories
               </Text>
+              <View className="flex-1 h-[1px] bg-[#E2DDD3]" />
             </View>
 
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text className="text-xs font-poppins-medium text-[#7A756D]">
-                Browse more ›
-              </Text>
-            </TouchableOpacity>
-          </View>
 
-          {/* Empty Container for Self-Help Books */}
-          <View className="h-48 rounded-2xl border border-dashed border-[#D6CFC2] bg-[#F4F1EA] items-center justify-center px-6">
-            <Ionicons name="sparkles-outline" size={26} color="#9A948B" />
-            <Text className="text-xs font-poppins-medium text-[#7A756D] mt-2 text-center">
-              Self-Help & Personal Growth books container
-            </Text>
+        {/* 3. Dynamic Categories */}
+        {categories.map((category) => (
+          <View key={category.id} className="pl-5 pr-0 py-5 mt-5">
+
+            <View className="flex-row items-center justify-between mb-5">
+              <Pressable
+                onPress={() => onSelectCategory?.(category.name, category.books)}
+                className="flex-row items-center flex-1 pr-2"
+              >
+                <View className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2" />
+                <Text className="text-lg font-poppins-bold text-[#1E1C1A]">
+                  {category.name}
+                </Text>
+              </Pressable>
+
+              <TouchableOpacity
+                onPress={() => onSelectCategory?.(category.name, category.books)}
+                activeOpacity={0.7}
+              >
+                <Text className="text-xs font-poppins-medium text-[#7A756D]">
+                  Browse more ›
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {category.books.length > 0 ? (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingRight: 20 }}
+              >
+                {category.books.map((book) => (
+                  <BookCard
+                    key={book.id}
+                    book={book}
+                    onPress={(selected) => onSelectBook?.(selected)}
+                  />
+                ))}
+              </ScrollView>
+            ) : (
+              <View className="h-48 rounded-2xl border border-dashed border-[#D6CFC2] bg-[#F4F1EA] items-center justify-center px-6">
+                <Ionicons name="library-outline" size={26} color="#9A948B" />
+                <Text className="text-xs font-poppins-medium text-[#7A756D] mt-2 text-center">
+                  No books in {category.name} yet
+                </Text>
+              </View>
+            )}
           </View>
-        </View>
+        ))}
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation
+        activeTab="Explore"
+        onTabPress={(tab) => onNavigateTab?.(tab)}
+      />
     </View>
   );
 }

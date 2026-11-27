@@ -1,0 +1,309 @@
+[
+  {
+    "id": 1,
+    "name": "Science & Nature",
+    "books": [
+      {
+        "id": 104,
+        "title": "The Hidden Life of Trees",
+        "author": "Peter Wohlleben",
+        "cover_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 101,
+        "title": "The Shadow of the Wind",
+        "author": "Carlos Ruiz Zafón",
+        "category": "Saved Books",
+        "cover_url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 105,
+        "title": "Cosmos",
+        "author": "Carl Sagan",
+        "cover_url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 106,
+        "title": "Entangled Life",
+        "author": "Merlin Sheldrake",
+        "cover_url": "https://covers.openlibrary.org/b/id/10152882-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 110,
+        "title": "A Brief History of Time",
+        "author": "Stephen Hawking",
+        "cover_url": "https://covers.openlibrary.org/b/id/10432365-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 111,
+        "title": "Silent Spring",
+        "author": "Rachel Carson",
+        "cover_url": "https://covers.openlibrary.org/b/id/3825693-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 112,
+        "title": "The Selfish Gene",
+        "author": "Richard Dawkins",
+        "cover_url": "https://covers.openlibrary.org/b/id/133936-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      },
+      {
+        "id": 113,
+        "title": "The Gene",
+        "author": "Siddhartha Mukherjee",
+        "cover_url": "https://covers.openlibrary.org/b/id/11320163-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 114,
+        "title": "The Immortal Life of Henrietta Lacks",
+        "author": "Rebecca Skloot",
+        "cover_url": "https://covers.openlibrary.org/b/id/8364866-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 115,
+        "title": "The Sixth Extinction",
+        "author": "Elizabeth Kolbert",
+        "cover_url": "https://covers.openlibrary.org/b/id/7910870-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 116,
+        "title": "Braiding Sweetgrass",
+        "author": "Robin Wall Kimmerer",
+        "cover_url": "https://covers.openlibrary.org/b/id/7281575-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 117,
+        "title": "The Origin of Species",
+        "author": "Charles Darwin",
+        "cover_url": "https://covers.openlibrary.org/b/id/7153600-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Self-Help & Personal Growth",
+    "books": [
+      {
+        "id": 107,
+        "title": "Atomic Habits",
+        "author": "James Clear",
+        "cover_url": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 108,
+        "title": "Deep Work",
+        "author": "Cal Newport",
+        "cover_url": "https://covers.openlibrary.org/b/id/7988607-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      },
+      {
+        "id": 119,
+        "title": "The 7 Habits of Highly Effective People",
+        "author": "Stephen R. Covey",
+        "cover_url": "https://covers.openlibrary.org/b/id/10079937-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 120,
+        "title": "Mindset",
+        "author": "Carol S. Dweck",
+        "cover_url": "https://covers.openlibrary.org/b/id/746414-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 121,
+        "title": "The Power of Now",
+        "author": "Eckhart Tolle",
+        "cover_url": "https://covers.openlibrary.org/b/id/551262-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 122,
+        "title": "Essentialism",
+        "author": "Greg McKeown",
+        "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      },
+      {
+        "id": 123,
+        "title": "Grit",
+        "author": "Angela Duckworth",
+        "cover_url": "https://covers.openlibrary.org/b/id/7438753-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 124,
+        "title": "The Subtle Art of Not Giving a F*ck",
+        "author": "Mark Manson",
+        "cover_url": "https://covers.openlibrary.org/b/id/8231990-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 125,
+        "title": "Thinking, Fast and Slow",
+        "author": "Daniel Kahneman",
+        "cover_url": "https://covers.openlibrary.org/b/id/13290711-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 126,
+        "title": "The Mountain Is You",
+        "author": "Brianna Wiest",
+        "cover_url": "https://covers.openlibrary.org/b/id/13838236-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 127,
+        "title": "Make Time",
+        "author": "Jake Knapp and John Zeratsky",
+        "cover_url": "https://covers.openlibrary.org/b/id/10132460-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 139,
+        "title": "The One Thing",
+        "author": "Gary Keller and Jay Papasan",
+        "cover_url": "https://covers.openlibrary.org/b/id/8757842-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Philippine History & Literature",
+    "books": [
+      {
+        "id": 109,
+        "title": "Noli Me Tángere",
+        "author": "José Rizal",
+        "cover_url": "https://covers.openlibrary.org/b/id/5738053-L.jpg",
+        "is_saved": true,
+        "status": "Available" 
+      },
+      {
+        "id": 128,
+        "title": "El Filibusterismo",
+        "author": "José Rizal",
+        "cover_url": "https://covers.openlibrary.org/b/id/1054329-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 129,
+        "title": "Florante at Laura",
+        "author": "Francisco Balagtas",
+        "cover_url": "https://covers.openlibrary.org/b/id/13881653-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 130,
+        "title": "The Woman Who Had Two Navels",
+        "author": "Nick Joaquín",
+        "cover_url": "https://covers.openlibrary.org/b/id/13016964-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 131,
+        "title": "Dekada '70",
+        "author": "Lualhati Bautista",
+        "cover_url": "https://covers.openlibrary.org/b/id/9149401-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      },
+      {
+        "id": 132,
+        "title": "Mga Ibong Mandaragit",
+        "author": "Amado V. Hernandez",
+        "cover_url": "https://covers.openlibrary.org/b/id/5732061-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 133,
+        "title": "Ilustrado",
+        "author": "Miguel Syjuco",
+        "cover_url": "https://covers.openlibrary.org/b/id/6463536-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 134,
+        "title": "Po-on",
+        "author": "F. Sionil José",
+        "cover_url": "https://covers.openlibrary.org/b/id/229890-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      },
+      {
+        "id": 135,
+        "title": "The Philippine Islands",
+        "author": "Antonio de Morga",
+        "cover_url": "https://covers.openlibrary.org/b/id/1737171-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 136,
+        "title": "The First Filipino",
+        "author": "Leon Ma. Guerrero",
+        "cover_url": "https://covers.openlibrary.org/b/id/13166926-L.jpg",
+        "is_saved": false,
+        "status": "Borrowed"
+      },
+      {
+        "id": 137,
+        "title": "A History of the Philippines",
+        "author": "Luis H. Francia",
+        "cover_url": "https://covers.openlibrary.org/b/id/6391811-L.jpg",
+        "is_saved": false,
+        "status": "Available"
+      },
+      {
+        "id": 138,
+        "title": "America Is in the Heart",
+        "author": "Carlos Bulosan",
+        "cover_url": "https://covers.openlibrary.org/b/id/157070-L.jpg",
+        "is_saved": true,
+        "status": "Available"
+      }
+    ]
+  }
+]

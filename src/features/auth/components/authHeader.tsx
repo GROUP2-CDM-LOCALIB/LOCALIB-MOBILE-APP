@@ -30,16 +30,13 @@ export function AuthHeaderLayout({ children }: AuthHeaderLayoutProps) {
         resizeMode="cover"
       />
 
-      {/* 1. Wrap the layout in KeyboardAvoidingView */}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* 2. Dismiss keyboard when tapping outside inputs */}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View className="flex-1">
             
-            {/* Header Section */}
             <Animated.View
               entering={FadeInDown.duration(600)}
               className="items-center pt-16 pb-4 px-6 mb-4"
@@ -57,18 +54,16 @@ export function AuthHeaderLayout({ children }: AuthHeaderLayoutProps) {
               </Text>
             </Animated.View>
 
-            {/* Bottom Sheet Card */}
             <Animated.View
               entering={SlideInDown.duration(500).damping(18)}
               className="flex-1 bg-[#FAF9F5] rounded-t-[40px] px-[28px] pt-[32px] shadow-2xl mt-4 overflow-hidden"
             >
-              {/* 3. ScrollView inside the card so only the form scrolls */}
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
                   flexGrow: 1,
-                  paddingBottom: 32, // Replaces the bottom padding of the parent View
+                  paddingBottom: 32, 
                 }}
               >
                 {children}
