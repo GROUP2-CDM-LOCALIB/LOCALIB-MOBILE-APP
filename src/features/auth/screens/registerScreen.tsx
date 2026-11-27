@@ -27,7 +27,7 @@ export function RegisterScreen({
   onContactDesk,
 }: RegisterScreenProps) {
     
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
 
   // ---------STEP 1----------
   const [lastName, setLastName] = useState('');
@@ -54,6 +54,8 @@ export function RegisterScreen({
       setStep(1);
     } else if (step === 3) {
       setStep(2);
+    } else if (step === 4) {
+      setStep(3);
     }
   };
 
@@ -61,6 +63,7 @@ export function RegisterScreen({
     if (step === 1) setStep(2);
     else if (step === 2) setStep(3);
     else if (step === 3) setStep(4);
+    else if (step === 4) setStep(5);
   };
 
   const getDropdownOptions = () => {
@@ -330,9 +333,45 @@ export function RegisterScreen({
           </Animated.View>
         )}
 
-        {/* ==========================CMPLETE=============================== */}     
-
+        {/*===========================STEP 4=============================== */}
         {step === 4 && (
+          <Animated.View key="step3" entering={FadeIn.duration(300)} className="flex-1">
+            <View className="items-center mb-8">
+              <Text className="text-[26px] font-poppins-bold text-[#1E1C1A]">
+                Verification
+              </Text>
+              <Text className="text-[12px] text-center font-poppins-medium text-[#7A756D]">
+                One-Time Password was sent to your email. Please check your inbox and enter the OTP below.
+              </Text>
+            </View>
+            <View className="mt-6 gap-5">
+              <View className="bg-[#E9E4DC] rounded-[12px] px-4 py-3.5">
+                <TextInput
+                  placeholder="Enter OTP"
+                  placeholderTextColor="#8C867E"
+                  keyboardType="numeric"
+                  textAlign="center"
+                  className="text-sm text-[#1E1C1A]"
+                />
+              </View>
+
+              <TouchableOpacity
+                onPress={() => console.log('Resend OTP')}
+                activeOpacity={0.8}
+                className="items-center mt-2"
+              >
+                <Text className="text-[12px] font-poppins-semibold text-[#4A3E20] underline">
+                  Resend OTP
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        )}
+
+
+
+        {/* ==========================CMPLETE=============================== */}     
+        {step === 5 && (
           <Animated.View key="step4" entering={FadeIn.duration(350)} className="flex-1 items-center pt-4">
 
             <View className="w-16 h-16 rounded-full border-2 border-[#4A3E20] items-center justify-center mb-4">
@@ -376,7 +415,7 @@ export function RegisterScreen({
         )}
 
         {/* ==========================BOTTOM NAV=============================== */}
-        {step < 4 && (
+        {step < 5 && (
             <View className="flex-row items-center justify-between mt-auto pt-4">
 
                 <TouchableOpacity // BACK BUTTON
